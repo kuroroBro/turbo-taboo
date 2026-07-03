@@ -1,0 +1,23 @@
+// Taboo card deck data
+const TABOO_CARDS = [
+  { id: 1, targetWord: "IPHONE", category: "Technology", tabooWords: ["Apple", "Phone", "Smartphone", "Screen", "Tim Cook"] },
+  { id: 2, targetWord: "WI-FI", category: "Technology", tabooWords: ["Internet", "Router", "Password", "Signal", "Connection"] },
+  { id: 3, targetWord: "ROBOT", category: "Technology", tabooWords: ["Machine", "Artificial", "Metal", "Android", "Terminator"] },
+  { id: 4, targetWord: "BLUETOOTH", category: "Technology", tabooWords: ["Wireless", "Headphones", "Connect", "Pair", "Speaker"] },
+  { id: 5, targetWord: "SUPERMAN", category: "Pop Culture", tabooWords: ["Batman", "Cape", "Krypton", "Clark Kent", "Hero"] },
+  { id: 6, targetWord: "STAR WARS", category: "Pop Culture", tabooWords: ["Jedi", "Lightsaber", "Yoda", "Force", "Darth Vader"] },
+  { id: 7, targetWord: "TAYLOR SWIFT", category: "Pop Culture", tabooWords: ["Singer", "Swiftie", "Grammy", "Pop", "Album"] },
+  { id: 8, targetWord: "NETFLIX", category: "Pop Culture", tabooWords: ["Stream", "Movies", "Subscription", "Binge", "TV"] },
+  { id: 9, targetWord: "UMBRELLA", category: "Everyday Objects", tabooWords: ["Rain", "Open", "Handle", "Cover", "Wet"] },
+  { id: 10, targetWord: "TOOTHBRUSH", category: "Everyday Objects", tabooWords: ["Teeth", "Bristles", "Brush", "Paste", "Dentist"] },
+  { id: 11, targetWord: "REFRIGERATOR", category: "Everyday Objects", tabooWords: ["Cold", "Fridge", "Kitchen", "Food", "Freezer"] },
+  { id: 12, targetWord: "BACKPACK", category: "Everyday Objects", tabooWords: ["Bag", "School", "Straps", "Carry", "Zipper"] },
+  { id: 13, targetWord: "PIZZA", category: "Food", tabooWords: ["Cheese", "Slice", "Italian", "Pepperoni", "Crust"] },
+  { id: 14, targetWord: "SUSHI", category: "Food", tabooWords: ["Rice", "Japanese", "Raw", "Fish", "Roll"] },
+  { id: 15, targetWord: "POPCORN", category: "Food", tabooWords: ["Movie", "Butter", "Kernel", "Snack", "Bag"] },
+  { id: 16, targetWord: "CHOCOLATE", category: "Food", tabooWords: ["Sweet", "Cocoa", "Candy", "Bar", "Brown"] },
+  { id: 17, targetWord: "EIFFEL TOWER", category: "Places", tabooWords: ["Paris", "France", "Tower", "Iron", "Landmark"] },
+  { id: 18, targetWord: "BEACH", category: "Places", tabooWords: ["Sand", "Ocean", "Wave", "Sun", "Swim"] },
+  { id: 19, targetWord: "HOSPITAL", category: "Places", tabooWords: ["Doctor", "Nurse", "Sick", "Patient", "Emergency"] },
+  { id: 20, targetWord: "AIRPORT", category: "Places", tabooWords: ["Plane", "Flight", "Terminal", "Luggage", "Gate"] }
+];
