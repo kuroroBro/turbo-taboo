@@ -14,6 +14,7 @@
     deckPointer: 0,
     currentCard: null,
     turnStats: { correct: [], taboo: [], skipped: [] },
+    activeCards: TABOO_CARDS,
   };
 
   // ---------- Elements ----------
@@ -34,6 +35,10 @@
     btnHowTo: document.getElementById("btn-how-to-play"),
     btnCloseHowTo: document.getElementById("btn-close-howto"),
     modalHowTo: document.getElementById("modal-howto"),
+    categoryList: document.getElementById("category-list"),
+    categoryWarning: document.getElementById("category-warning"),
+    btnCatAll: document.getElementById("btn-cat-all"),
+    btnCatNone: document.getElementById("btn-cat-none"),
 
     readyTeamName: document.getElementById("ready-team-name"),
     readyScoreboard: document.getElementById("ready-scoreboard"),
@@ -88,8 +93,59 @@
     });
   }
 
+  // ---------- Categories ----------
+  const CATEGORIES = [...new Set(TABOO_CARDS.map((c) => c.category))];
+
+  function renderCategoryList() {
+    el.categoryList.innerHTML = "";
+    CATEGORIES.forEach((category, i) => {
+      const count = TABOO_CARDS.filter((c) => c.category === category).length;
+      const id = "cat-" + i;
+      const label = document.createElement("label");
+      label.className = "category-option";
+      label.setAttribute("for", id);
+      label.innerHTML = `
+        <input type="checkbox" id="${id}" data-category="${category}" checked>
+        <span>${category}</span>
+        <span class="cat-count">${count}</span>
+      `;
+      el.categoryList.appendChild(label);
+    });
+    el.categoryList.querySelectorAll("input[type=checkbox]").forEach((cb) => {
+      cb.addEventListener("change", updateCategoryValidity);
+    });
+    updateCategoryValidity();
+  }
+
+  function getSelectedCategories() {
+    return Array.from(el.categoryList.querySelectorAll("input[type=checkbox]:checked")).map(
+      (cb) => cb.dataset.category
+    );
+  }
+
+  function updateCategoryValidity() {
+    const selected = getSelectedCategories();
+    const valid = selected.length > 0;
+    el.categoryWarning.classList.toggle("active", !valid);
+    el.btnStartGame.disabled = !valid;
+    return valid;
+  }
+
+  el.btnCatAll.addEventListener("click", () => {
+    el.categoryList.querySelectorAll("input[type=checkbox]").forEach((cb) => (cb.checked = true));
+    updateCategoryValidity();
+  });
+  el.btnCatNone.addEventListener("click", () => {
+    el.categoryList.querySelectorAll("input[type=checkbox]").forEach((cb) => (cb.checked = false));
+    updateCategoryValidity();
+  });
+
+  renderCategoryList();
+
   // ---------- Setup ----------
   el.btnStartGame.addEventListener("click", () => {
+    if (!updateCategoryValidity()) return;
+
     const name1 = el.team1Name.value.trim() || "Team Red";
     const name2 = el.team2Name.value.trim() || "Team Blue";
     state.teams = [
@@ -100,7 +156,10 @@
     state.turnsPerTeam = parseInt(el.roundsPerTeam.value, 10);
     state.turnsTaken = [0, 0];
     state.currentTeamIndex = 0;
-    state.deck = shuffle(TABOO_CARDS);
+
+    const selectedCategories = getSelectedCategories();
+    state.activeCards = TABOO_CARDS.filter((c) => selectedCategories.includes(c.category));
+    state.deck = shuffle(state.activeCards);
     state.deckPointer = 0;
 
     goToReady();
@@ -125,7 +184,7 @@
   // ---------- Play / Turn logic ----------
   function drawNextCard() {
     if (state.deckPointer >= state.deck.length) {
-      state.deck = shuffle(TABOO_CARDS);
+      state.deck = shuffle(state.activeCards);
       state.deckPointer = 0;
     }
     const card = state.deck[state.deckPointer];

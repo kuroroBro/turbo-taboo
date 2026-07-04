@@ -17,20 +17,26 @@ python3 -m http.server 8000
 
 ## How to play
 
-1. Enter both team names, pick a turn length and number of turns per team, and hit **Start Game**.
+1. Enter both team names, pick a turn length and number of turns per team, check the categories you want in the deck, and hit **Start Game**.
 2. Pass the device to the describer for the active team and tap **I'm Ready — Go!**.
 3. Describe the target word on the card without saying it or any of the 5 taboo words while your team shouts out guesses.
 4. Tap **✅ Correct** to score a point and draw the next card, **⏭ Skip** to pass a hard card, or **✋ Taboo** if a forbidden word was said.
 5. When the timer hits zero, review the turn summary and continue to the next team.
 6. After all turns are played, the team with the most correct guesses wins.
 
+## Categories
+
+250 cards across 5 categories (50 each): Technology, Pop Culture, Everyday
+Objects, Food, Places. Each has a checkbox on the setup screen so you can
+play with only the categories you want — at least one must stay checked.
+
 ## Project structure
 
 ```
 index.html          Game screens (setup, turn, play, summary, game over)
 css/style.css        Styling
-js/cards.js          Taboo card deck (20 cards, 5 categories)
-js/app.js            Game state machine and logic
+js/cards.js          Taboo card deck (250 cards, 5 categories, 50 each)
+js/app.js            Game state machine, category filtering, and logic
 data/cards.json      Same deck data in plain JSON, for reuse outside the app
 ```
 
