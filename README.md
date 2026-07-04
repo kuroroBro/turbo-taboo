@@ -32,17 +32,15 @@ css/style.css        Styling
 js/cards.js          Taboo card deck (20 cards, 5 categories)
 js/app.js            Game state machine and logic
 data/cards.json      Same deck data in plain JSON, for reuse outside the app
-.github/workflows/   GitHub Pages deploy workflow
 ```
 
 ## Deploying to GitHub Pages
 
-This repo includes a GitHub Actions workflow (`.github/workflows/deploy.yml`)
-that deploys the site to GitHub Pages automatically on every push to `main`.
+GitHub Pages is enabled for this repo (Settings → Pages, source: deploy from
+a branch) and rebuilds automatically on every push to this branch — no
+workflow needed. The site is live at:
 
-To enable it: go to **Settings → Pages** in this repository and set
-**Source** to **GitHub Actions**. The site will publish at
-`https://<owner>.github.io/<repo>/`.
+`https://kurorobro.github.io/turbo-taboo/`
 
 ## Adding more cards
 
