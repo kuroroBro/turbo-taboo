@@ -93,6 +93,51 @@
     });
   }
 
+  // ---------- Seen-card tracking (persisted per browser) ----------
+  const SEEN_CARDS_KEY = "turboTabooSeenCardIds";
+
+  function loadSeenIds() {
+    try {
+      const raw = localStorage.getItem(SEEN_CARDS_KEY);
+      return new Set(raw ? JSON.parse(raw) : []);
+    } catch (e) {
+      return new Set();
+    }
+  }
+
+  function saveSeenIds() {
+    try {
+      localStorage.setItem(SEEN_CARDS_KEY, JSON.stringify(Array.from(seenIds)));
+    } catch (e) {
+      // localStorage unavailable (private mode, etc.) - seen tracking just won't persist
+    }
+  }
+
+  const seenIds = loadSeenIds();
+
+  function markSeen(card) {
+    seenIds.add(card.id);
+    saveSeenIds();
+  }
+
+  // Builds a shuffled deck of cards not yet seen in this browser; once every
+  // card in the pool has been seen, that pool's history is cleared so it can
+  // cycle again. avoidFirstId keeps the just-shown card from immediately
+  // repeating right at that reset boundary.
+  function buildDeck(pool, avoidFirstId) {
+    let unseen = pool.filter((c) => !seenIds.has(c.id));
+    if (unseen.length === 0) {
+      pool.forEach((c) => seenIds.delete(c.id));
+      saveSeenIds();
+      unseen = pool.slice();
+    }
+    const deck = shuffle(unseen);
+    if (avoidFirstId != null && deck.length > 1 && deck[0].id === avoidFirstId) {
+      [deck[0], deck[1]] = [deck[1], deck[0]];
+    }
+    return deck;
+  }
+
   // ---------- Categories ----------
   const CATEGORIES = [...new Set(TABOO_CARDS.map((c) => c.category))];
 
@@ -159,7 +204,7 @@
 
     const selectedCategories = getSelectedCategories();
     state.activeCards = TABOO_CARDS.filter((c) => selectedCategories.includes(c.category));
-    state.deck = shuffle(state.activeCards);
+    state.deck = buildDeck(state.activeCards, state.currentCard ? state.currentCard.id : null);
     state.deckPointer = 0;
 
     goToReady();
@@ -184,11 +229,13 @@
   // ---------- Play / Turn logic ----------
   function drawNextCard() {
     if (state.deckPointer >= state.deck.length) {
-      state.deck = shuffle(state.activeCards);
+      const lastId = state.currentCard ? state.currentCard.id : null;
+      state.deck = buildDeck(state.activeCards, lastId);
       state.deckPointer = 0;
     }
     const card = state.deck[state.deckPointer];
     state.deckPointer++;
+    markSeen(card);
     return card;
   }
 

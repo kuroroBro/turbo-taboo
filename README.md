@@ -30,6 +30,14 @@ python3 -m http.server 8000
 Objects, Food, Places. Each has a checkbox on the setup screen so you can
 play with only the categories you want — at least one must stay checked.
 
+## Repeat prevention
+
+The browser remembers (via `localStorage`) which cards you've already been
+shown, so a target word won't come up again until every card in your
+selected categories has appeared at least once — even across page reloads
+and new games in the same browser. Once a category's pool is fully used,
+it automatically resets and starts a new cycle.
+
 ## Project structure
 
 ```
