@@ -95,6 +95,7 @@
 
   // ---------- Seen-card tracking (persisted per browser) ----------
   const SEEN_CARDS_KEY = "turboTabooSeenCardIds";
+  const RESET_SEEN_CARDS_MESSAGE = "All cards in the selected categories have been used. Reset card data so cards can be reused?";
 
   function loadSeenIds() {
     try {
@@ -127,6 +128,7 @@
   function buildDeck(pool, avoidFirstId) {
     let unseen = pool.filter((c) => !seenIds.has(c.id));
     if (unseen.length === 0) {
+      if (!window.confirm(RESET_SEEN_CARDS_MESSAGE)) return null;
       pool.forEach((c) => seenIds.delete(c.id));
       saveSeenIds();
       unseen = pool.slice();
@@ -204,7 +206,9 @@
 
     const selectedCategories = getSelectedCategories();
     state.activeCards = TABOO_CARDS.filter((c) => selectedCategories.includes(c.category));
-    state.deck = buildDeck(state.activeCards, state.currentCard ? state.currentCard.id : null);
+    const deck = buildDeck(state.activeCards, state.currentCard ? state.currentCard.id : null);
+    if (!deck) return;
+    state.deck = deck;
     state.deckPointer = 0;
 
     goToReady();
@@ -230,7 +234,9 @@
   function drawNextCard() {
     if (state.deckPointer >= state.deck.length) {
       const lastId = state.currentCard ? state.currentCard.id : null;
-      state.deck = buildDeck(state.activeCards, lastId);
+      const deck = buildDeck(state.activeCards, lastId);
+      if (!deck) return null;
+      state.deck = deck;
       state.deckPointer = 0;
     }
     const card = state.deck[state.deckPointer];
@@ -252,7 +258,12 @@
   }
 
   function nextCard() {
-    state.currentCard = drawNextCard();
+    const card = drawNextCard();
+    if (!card) {
+      endTurn();
+      return;
+    }
+    state.currentCard = card;
     renderCard(state.currentCard);
   }
 

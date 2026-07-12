@@ -36,7 +36,7 @@ The browser remembers (via `localStorage`) which cards you've already been
 shown, so a target word won't come up again until every card in your
 selected categories has appeared at least once — even across page reloads
 and new games in the same browser. Once a category's pool is fully used,
-it automatically resets and starts a new cycle.
+the game asks before resetting card data and starting a new cycle.
 
 ## Project structure
 
