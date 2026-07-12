@@ -34,6 +34,12 @@ body {
   padding: 24px 16px;
 }
 
+body:has(#screen-setup.active) {
+  background:
+    linear-gradient(180deg, rgba(20, 21, 31, 0.55) 0%, rgba(20, 21, 31, 0.92) 85%),
+    url('../images/home-bg.jpg') center top / cover no-repeat;
+}
+
 .app {
   width: 100%;
   max-width: 480px;
